@@ -1,7 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
-const contactsPath = path.resolve("dp", "contacts.json");
+
+const contactsPath = path.resolve("db", "contacts.json");
 export const getAll = async () => {
   const data = await fs.readFile(contactsPath);
 
