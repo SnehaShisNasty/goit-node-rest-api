@@ -31,9 +31,7 @@ const deleteContact = async (req, res) => {
     throw HttpError(404, `Contact with id=${id} not found`);
   }
 
-  res.json({
-    message: "Delete success",
-  });
+  res.json(result);
 };
 
 const createContact = async (req, res) => {
@@ -45,11 +43,14 @@ const createContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await update(id, req.body);
+  if (result === undefined) {
+    throw HttpError(400, `Body must have at least one field`);
+  }
   if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found`);
+    throw HttpError(400, `Contact with id=${id} not found`);
   }
 
-  res.json(result);
+  res.json(result || { message: "Delete success" });
 };
 export default {
   getAllContacts: ctrlWrapper(getAllContacts),

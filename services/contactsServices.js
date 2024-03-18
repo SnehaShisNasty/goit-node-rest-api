@@ -26,8 +26,13 @@ export const create = async (data) => {
 };
 
 export const update = async (id, data) => {
+  if (Object.keys(data).length === 0) {
+    return undefined;
+  }
   const contacts = await getAll();
+
   const index = contacts.findIndex((item) => item.id === id);
+
   if (index === -1) {
     return null;
   }
