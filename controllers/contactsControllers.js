@@ -1,11 +1,61 @@
-import contactsService from "../services/contactsServices.js";
+import {
+  getAll,
+  get,
+  create,
+  update,
+  deleteCon,
+} from "../services/contactsServices.js";
 
-export const getAllContacts = (req, res) => {};
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
+const getAllContacts = async (req, res) => {
+  const result = await getAll();
 
-export const getOneContact = (req, res) => {};
+  res.json(result);
+};
 
-export const deleteContact = (req, res) => {};
+const getOneContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await get(id);
+  if (!result) {
+    throw HttpError(404, `Contact with id=${id} not found`);
+  }
 
-export const createContact = (req, res) => {};
+  res.json(result);
+};
 
-export const updateContact = (req, res) => {};
+const deleteContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await deleteCon(id);
+  if (!result) {
+    throw HttpError(404, `Contact with id=${id} not found`);
+  }
+
+  res.json(result);
+};
+
+const createContact = async (req, res) => {
+  const result = await create(req.body);
+
+  res.status(201).json(result);
+};
+
+const updateContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await update(id, req.body);
+  if (result === undefined) {
+    throw HttpError(400, `Body must have at least one field`);
+  }
+  if (!result) {
+    throw HttpError(400, `Contact with id=${id} not found`);
+  }
+
+  res.json(result || { message: "Delete success" });
+};
+export default {
+  getAllContacts: ctrlWrapper(getAllContacts),
+  getOneContact: ctrlWrapper(getOneContact),
+  createContact: ctrlWrapper(createContact),
+  updateContact: ctrlWrapper(updateContact),
+  deleteContact: ctrlWrapper(deleteContact),
+};
