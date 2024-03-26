@@ -12,3 +12,5 @@ export const update = (id, data) =>
   Contact.findByIdAndUpdate(id, data, { new: true, runValidators: true });
 
 export const deleteCon = (id) => Contact.findByIdAndDelete(id);
+export const updateStatus = (id, body) =>
+  Contact.findByIdAndUpdate(id, body, { new: true, runValidators: true });
