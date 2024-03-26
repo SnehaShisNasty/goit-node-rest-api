@@ -43,14 +43,8 @@ const createContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await update(id, req.body);
-  if (result === undefined) {
-    throw HttpError(400, `Body must have at least one field`);
-  }
-  if (!result) {
-    throw HttpError(400, `Contact with id=${id} not found`);
-  }
 
-  res.json(result || { message: "Delete success" });
+  res.json(result);
 };
 export default {
   getAllContacts: ctrlWrapper(getAllContacts),
